@@ -1,0 +1,8 @@
+{
+  "name": "Remix Remix RailPath India 2",
+  "description": "Intelligent Indian Railway Route Finder, Automatic Multi-Route Planner, Transfer Risk Evaluator \u0026 Live Connection Monitor.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

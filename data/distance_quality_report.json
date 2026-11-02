@@ -1,0 +1,219 @@
+{
+  "reportTitle": "RailPath India \u2014 Railway Distance Data Audit & Normalization Quality Report",
+  "generatedAt": "2026-11-02T05:20:00.000Z",
+  "phase1AuditCurrentDataset": {
+    "datasetFile": "data/nationwide_timetable.json",
+    "source": "DataMeet Indian Railways Dataset (https://github.com/datameet/railways)",
+    "license": "CC0 1.0 Universal (Public Domain Dedication)",
+    "totalTrains": 5058,
+    "trainsWithOverallDistanceField_dist": 5027,
+    "trainsMissingOverallDistanceField_dist": 31,
+    "totalTrainStops": 100694,
+    "totalIntermediateStops": 90578,
+    "stopsWithUsableCumulativeDistanceBeforeFix": 10085,
+    "stopsWithUsableCumulativeDistancePctBeforeFix": 10.02,
+    "intermediateStopsWithCumulativeDistanceBeforeFix": 0,
+    "intermediateStopsWithCumulativeDistancePctBeforeFix": 0.0,
+    "rootCause": "Raw DataMeet schedules.json lacks a distance column on stop rows; scripts/buildNationwideTimetable.cjs only populated km=0 at origin (stop 0) and km=properties.distance at the final destination stop, leaving all 90,578 intermediate stops as km=null."
+  },
+  "phase2And3CandidateDatasetEvaluations": [
+    {
+      "repository": "https://github.com/prasenjit-27/Indian-Railway-Data",
+      "fileInspected": "trains.json (92.2 MB)",
+      "license": "MIT License",
+      "totalTrains": 5208,
+      "totalStops": 416637,
+      "stopsWithNumericDistanceField": 416637,
+      "stopsWithPositiveDistanceGreaterThanZero": 0,
+      "strictlyMonotonicTrains": 0,
+      "trainsMatchingOverallDistance": 45,
+      "stationDirectoryMatchPct": 95.46,
+      "zonesCovered": 17,
+      "validationVerdict": "REJECTED_FOR_STOP_DISTANCES",
+      "reason": "Every single stop record in prasenjit-27/Indian-Railway-Data trains.json has \"distance\": 0 (0 out of 416,637 stops have distance > 0), failing Phase 3 monotonicity and overallDistanceKm consistency checks."
+    },
+    {
+      "repository": "https://github.com/KoyenaChowdhury/RSTGCN",
+      "fileInspected": "train_routes_Sep2024.csv + IRN_edges.csv",
+      "license": "None (license: null on GitHub; academic paper citation dataset)",
+      "totalTrains": 3892,
+      "totalStops": 85055,
+      "stopsWithNumericDistanceField": 85055,
+      "stopsWithPositiveDistanceGreaterThanZero": 81163,
+      "strictlyMonotonicTrains": 3884,
+      "nonMonotonicTrains": 8,
+      "stationDirectoryMatchPct": 99.91,
+      "zonesCovered": 17,
+      "validationVerdict": "NOT_REDISTRIBUTED_NO_OPEN_LICENSE",
+      "reason": "Contains high-quality stop distances (99.79% monotonic), but repository has no open-source license file (license: null). Excluded from redistribution to strictly honor licensing rules."
+    },
+    {
+      "repository": "https://github.com/arshadkazmi42/offline-train-time-table",
+      "fileInspected": "assets/raildb.sqlite (timetable table)",
+      "upstreamSource": "Government of India Open Government Data Platform (data.gov.in) \u2014 Ministry of Railways All-India Train Timetable Dataset",
+      "license": "MIT License (repository) / Government Open Data License - India (GODL-India)",
+      "totalTrains": 2810,
+      "totalStops": 69006,
+      "strictlyMonotonicTrains": 2703,
+      "quarantinedNonMonotonicTrains": 107,
+      "repeatedStationCircularTrains": 47,
+      "stationDirectoryMatchPct": 97.75,
+      "zonesCovered": 18,
+      "validationVerdict": "SELECTED_AND_VALIDATED",
+      "reason": "Legitimately reusable under MIT License & GODL-India, covers all 18 railway zones (99.16% station code match with Railway_stations.json), and provides verified integer cumulative stop distances from train origin."
+    }
+  ],
+  "phase4PostNormalizationCoverage": {
+    "outputDatasetFile": "data/verified_stop_distances.json",
+    "totalTrains": 5058,
+    "verifiedCompleteTrainsCount": 2621,
+    "verifiedCompleteTrainsPct": 51.82,
+    "verifiedPartialTrainsCount": 1950,
+    "verifiedPartialTrainsPct": 38.55,
+    "trainsWithIntermediateStopDistancesCount": 4571,
+    "trainsWithIntermediateStopDistancesPct": 90.37,
+    "endpointOnlyTrainsCount": 468,
+    "unverifiedTrainsCount": 19,
+    "totalStops": 100694,
+    "verifiedStopsAfterFix": 80382,
+    "verifiedStopsPctAfterFix": 79.83,
+    "verifiedIntermediateStopsAfterFix": 70288,
+    "verifiedIntermediateStopsPctAfterFix": 77.6,
+    "quarantinedRaildbTrainsCount": 107,
+    "quarantinedRaildbTrainsSample": [
+      {
+        "trainNumber": "01156",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "05010",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "06541",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "06542",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "08891",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "11019",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "11037",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "11039",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "11040",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "11051",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "11057",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "11063",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "11067",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "11301",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "11304",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "12139",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "12147",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "12149",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "12307",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "12320",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "12343",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "12448",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "12463",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "12488",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      },
+      {
+        "trainNumber": "12687",
+        "reason": "Non-monotonic or slip-coach cumulative stop distance sequence"
+      }
+    ],
+    "timetableTrainsMissingOverallDistSample": [
+      "55145",
+      "52501",
+      "55101",
+      "12889",
+      "55103",
+      "55104",
+      "54582",
+      "53441",
+      "58101",
+      "52504",
+      "12163",
+      "58110",
+      "56101",
+      "33512",
+      "58109",
+      "56100",
+      "55146",
+      "52503",
+      "12736",
+      "53446",
+      "52015",
+      "53442",
+      "52502",
+      "53445",
+      "12890",
+      "52506",
+      "12735",
+      "12164",
+      "55102",
+      "52550",
+      "52505"
+    ]
+  }
+}
